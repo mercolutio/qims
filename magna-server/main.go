@@ -72,7 +72,11 @@ type Workflow struct {
 
 func initDB() {
 	var err error
-	db, err = sql.Open("sqlite3", "./daten.db?_journal_mode=WAL&_busy_timeout=5000")
+	dbPath := os.Getenv("QIMS_DB_PATH")
+	if dbPath == "" {
+		dbPath = "./daten.db"
+	}
+	db, err = sql.Open("sqlite3", dbPath+"?_journal_mode=WAL&_busy_timeout=5000")
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -8,7 +8,9 @@ RUN CGO_ENABLED=1 go build -o magna-server .
 FROM alpine:latest
 RUN apk add --no-cache ca-certificates
 WORKDIR /app
+RUN mkdir -p /app/data
 COPY --from=builder /app/magna-server .
 EXPOSE 8080
 VOLUME ["/app/data"]
+ENV QIMS_DB_PATH=/app/data/daten.db
 CMD ["./magna-server"]
