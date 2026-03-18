@@ -168,6 +168,9 @@ func initDB() {
 		"ALTER TABLE messungen ADD COLUMN pruefplan_id INTEGER",
 		"ALTER TABLE messungen ADD COLUMN durchfuehrung_id INTEGER",
 		"ALTER TABLE messungen ADD COLUMN daten_json TEXT",
+		"ALTER TABLE messungen ADD COLUMN messergebnis TEXT DEFAULT ''",
+		"ALTER TABLE messungen ADD COLUMN test_col TEXT",
+		"ALTER TABLE pruefplan ADD COLUMN ziel_uhrzeit TEXT DEFAULT '07:00'",
 	}
 	for _, m := range migrations {
 		db.Exec(m) // ignore errors (column already exists)
