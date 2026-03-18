@@ -237,7 +237,7 @@ function renderDynamicInputStep(step) {
             // Merge auto_values and save
             const messung = { ...collectedData, ...(step.auto_values || {}), datum: getTodayDate() };
             const result = await SaveMessung(messung);
-            if (result === 'OK') {
+            if (result && !result.startsWith('Fehler')) {
                 showToast('Erfolgreich gespeichert!', 'success');
                 collectedData = {};
                 setTimeout(() => renderStep1(), 1500);
@@ -651,7 +651,7 @@ async function renderStepNokId() {
         };
 
         SaveMessung(messung).then((result) => {
-            if (result === 'OK') {
+            if (result && !result.startsWith('Fehler')) {
                 showToast('Einstellteil erfolgreich gespeichert!', 'success');
                 setTimeout(() => renderStep1(), 1500);
             } else {
@@ -897,7 +897,7 @@ function bindFormEvents() {
         };
 
         SaveMessung(messung).then((result) => {
-            if (result === 'OK') {
+            if (result && !result.startsWith('Fehler')) {
                 showToast('Messung erfolgreich gespeichert!', 'success');
                 // Reset and go back to step 1 after delay
                 setTimeout(() => renderStep1(), 1500);
@@ -951,7 +951,7 @@ async function loadDropdowns() {
 // Init
 CheckConnection().then(async (result) => {
     const bar = document.getElementById('statusBar');
-    if (result === 'OK') {
+    if (result && !result.startsWith('Fehler')) {
         bar.textContent = 'Verbunden mit Server';
         bar.classList.add('connected');
         renderStep1();
