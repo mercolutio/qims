@@ -211,8 +211,16 @@ function renderDefinitionenTable() {
             statusClass = 'faellig';
             statusText = 'Überfällig';
         } else if (faelligkeit === today && nowTime >= zielUhrzeit) {
-            statusClass = 'heute';
-            statusText = 'Jetzt fällig';
+            // Check if more than 30 min past due
+            const nowMin = parseInt(nowTime.split(':')[0]) * 60 + parseInt(nowTime.split(':')[1]);
+            const zielMin = parseInt(zielUhrzeit.split(':')[0]) * 60 + parseInt(zielUhrzeit.split(':')[1]);
+            if (nowMin - zielMin > 30) {
+                statusClass = 'faellig';
+                statusText = 'Überfällig';
+            } else {
+                statusClass = 'heute';
+                statusText = 'Jetzt fällig';
+            }
         } else if (faelligkeit === today && nowTime < zielUhrzeit) {
             statusClass = 'ok';
             statusText = `Ab ${zielUhrzeit} fällig`;
