@@ -1,0 +1,385 @@
+/* DB Admin Layout */
+.db-admin {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 16px;
+    min-height: 0;
+}
+
+.db-admin-top {
+    display: flex;
+    gap: 16px;
+    min-height: 0;
+    flex: 1;
+}
+
+/* Table List Sidebar */
+.db-tables {
+    width: 200px;
+    flex-shrink: 0;
+    background: var(--magna-white);
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    padding: 12px;
+}
+
+.db-tables h3 {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--magna-label);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.db-table-item {
+    padding: 8px 10px;
+    margin-bottom: 2px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: monospace;
+    color: var(--magna-text);
+    transition: all 0.1s;
+    border-left: 3px solid transparent;
+}
+
+.db-table-item:hover {
+    background: var(--magna-light-gray);
+}
+
+.db-table-item.active {
+    background: #fef0f3;
+    color: var(--magna-red);
+    border-left-color: var(--magna-red);
+    font-weight: 500;
+}
+
+/* Data Table */
+.db-data {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--magna-white);
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    overflow: hidden;
+    min-height: 0;
+}
+
+.db-data-header {
+    padding: 10px 14px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.db-data-header h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--magna-dark);
+}
+
+.db-btn-add-col,
+.db-btn-add-row {
+    padding: 4px 12px;
+    border: 1px solid var(--magna-border);
+    border-radius: 4px;
+    background: var(--magna-white);
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--magna-text);
+    transition: all 0.15s;
+}
+
+.db-btn-add-col:hover,
+.db-btn-add-row:hover {
+    background: var(--magna-light-gray);
+    border-color: var(--magna-red);
+    color: var(--magna-red);
+}
+
+.db-data-header .row-count {
+    font-size: 12px;
+    color: var(--magna-label);
+    margin-left: auto;
+}
+
+.db-data-scroll {
+    flex: 1;
+    overflow: auto;
+}
+
+.db-data table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    font-family: monospace;
+}
+
+.db-data thead th {
+    background: var(--magna-dark);
+    color: var(--magna-white);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.db-data tbody td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    white-space: nowrap;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.db-data tbody tr:hover {
+    background: #f8f8f8;
+}
+
+.db-data tbody td.editable {
+    cursor: text;
+}
+
+.db-data tbody td.editable:hover {
+    background: #fffde7;
+}
+
+.db-data tbody td.editing {
+    padding: 2px;
+}
+
+.db-data tbody td.editing input {
+    width: 100%;
+    padding: 4px 6px;
+    border: 2px solid var(--magna-red);
+    border-radius: 3px;
+    font-size: 12px;
+    font-family: monospace;
+    outline: none;
+}
+
+.db-data .null-value {
+    color: #bbb;
+    font-style: italic;
+}
+
+.db-row-delete {
+    background: none;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+.db-row-delete:hover {
+    background: #fce4ec;
+    color: #c62828;
+}
+
+.db-row-delete.confirm {
+    background: #c62828;
+    color: #fff;
+    font-size: 11px;
+    padding: 2px 8px;
+    white-space: nowrap;
+}
+
+/* Add Column Modal */
+.db-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.db-modal {
+    background: var(--magna-white);
+    border-radius: 8px;
+    padding: 24px;
+    width: 380px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+.db-modal h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--magna-dark);
+}
+
+.db-modal-field {
+    margin-bottom: 12px;
+}
+
+.db-modal-field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--magna-label);
+    margin-bottom: 4px;
+}
+
+.db-modal-field input,
+.db-modal-field select {
+    width: 100%;
+    height: 34px;
+    padding: 4px 10px;
+    border: 1px solid var(--magna-border);
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: inherit;
+}
+
+.db-modal-field input:focus,
+.db-modal-field select:focus {
+    outline: none;
+    border-color: var(--magna-red);
+    box-shadow: 0 0 0 2px rgba(165, 0, 52, 0.12);
+}
+
+.db-modal-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.db-modal-btn {
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--magna-border);
+    background: var(--magna-white);
+    color: var(--magna-text);
+}
+
+.db-modal-btn:hover {
+    background: var(--magna-light-gray);
+}
+
+.db-modal-btn.confirm {
+    background: var(--magna-red);
+    color: var(--magna-white);
+    border: none;
+}
+
+.db-modal-btn.confirm:hover {
+    background: #8a002c;
+}
+
+/* SQL Console */
+.db-console {
+    background: var(--magna-white);
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    padding: 14px;
+    flex-shrink: 0;
+}
+
+.db-console h3 {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--magna-label);
+    margin-bottom: 8px;
+}
+
+.db-console-input {
+    display: flex;
+    gap: 8px;
+}
+
+.db-console textarea {
+    flex: 1;
+    height: 60px;
+    padding: 8px;
+    border: 1px solid var(--magna-border);
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: monospace;
+    color: var(--magna-text);
+    resize: vertical;
+}
+
+.db-console textarea:focus {
+    outline: none;
+    border-color: var(--magna-red);
+    box-shadow: 0 0 0 2px rgba(165, 0, 52, 0.12);
+}
+
+.db-console .btn-run {
+    padding: 0 20px;
+    background: var(--magna-dark);
+    color: var(--magna-white);
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: inherit;
+    font-weight: 500;
+    cursor: pointer;
+    align-self: flex-end;
+    height: 36px;
+}
+
+.db-console .btn-run:hover {
+    background: #333;
+}
+
+.db-console-result {
+    margin-top: 8px;
+    font-size: 12px;
+    font-family: monospace;
+    color: var(--magna-label);
+    max-height: 200px;
+    overflow: auto;
+}
+
+.db-console-result.error {
+    color: var(--magna-red);
+}
+
+.db-console-result table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 4px;
+}
+
+.db-console-result th {
+    background: #f5f5f5;
+    padding: 4px 8px;
+    text-align: left;
+    font-size: 11px;
+    border: 1px solid #e0e0e0;
+}
+
+.db-console-result td {
+    padding: 4px 8px;
+    border: 1px solid #e0e0e0;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

@@ -1,0 +1,21 @@
+# Binaries
+magna-server/magna-server
+magna-server/daten.db
+magna-server/daten.db-wal
+magna-server/daten.db-shm
+magna-server/smtp.conf
+magna-auswertung/magna-server
+*.exe
+*.app
+
+# Wails build output
+magna-messung/build/bin/
+magna-auswertung/build/bin/
+
+# Node modules
+node_modules/
+frontend/dist/
+
+# OS files
+.DS_Store
+*.swp

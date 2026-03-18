@@ -1,0 +1,26 @@
+FROM node:18-alpine AS builder-auswertung
+WORKDIR /app
+COPY magna-auswertung/frontend/package.json .
+RUN npm install
+COPY magna-auswertung/frontend/ .
+# Create a shim for Wails Go bindings that calls the API directly
+RUN mkdir -p wailsjs/go/main
+COPY web-shim/App.js wailsjs/go/main/App.js
+RUN npm run build
+
+FROM node:18-alpine AS builder-messung
+WORKDIR /app
+COPY magna-messung/frontend/package.json .
+RUN npm install
+COPY magna-messung/frontend/ .
+RUN mkdir -p wailsjs/go/main
+COPY web-shim/AppMessung.js wailsjs/go/main/App.js
+RUN npm run build
+
+FROM nginx:alpine
+# Auswertung on /
+COPY --from=builder-auswertung /app/dist /usr/share/nginx/html/auswertung
+# Messung on /messung
+COPY --from=builder-messung /app/dist /usr/share/nginx/html/messung
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80

@@ -1,0 +1,307 @@
+.stats-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* KPI Cards Row */
+.stats-kpis {
+    display: flex;
+    gap: 16px;
+}
+
+.kpi-card {
+    flex: 1;
+    background: var(--magna-white);
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.kpi-value {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 6px;
+}
+
+.kpi-value.green { color: #2e7d32; }
+.kpi-value.red { color: #c62828; }
+.kpi-value.orange { color: #ef6c00; }
+.kpi-value.dark { color: var(--magna-dark); }
+
+.kpi-label {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--magna-label);
+}
+
+.kpi-sub {
+    font-size: 11px;
+    color: #bbb;
+    margin-top: 4px;
+}
+
+/* Chart Row */
+.stats-row {
+    display: flex;
+    gap: 16px;
+}
+
+.stats-card {
+    flex: 1;
+    background: var(--magna-white);
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    padding: 20px;
+}
+
+.stats-card h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--magna-dark);
+    margin-bottom: 16px;
+}
+
+/* Donut Chart */
+.donut-container {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.donut {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.donut-hole {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;
+    background: var(--magna-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.donut-hole .donut-total {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--magna-dark);
+}
+
+.donut-hole .donut-label {
+    font-size: 10px;
+    color: var(--magna-label);
+}
+
+.donut-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.donut-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--magna-text);
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.legend-dot.ok { background: #2e7d32; }
+.legend-dot.nok { background: #c62828; }
+.legend-dot.gz { background: #ef6c00; }
+.legend-dot.none { background: #ddd; }
+
+.legend-value {
+    margin-left: auto;
+    font-weight: 600;
+    min-width: 30px;
+    text-align: right;
+}
+
+/* Bar Chart */
+.bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bar-label {
+    width: 100px;
+    font-size: 12px;
+    color: var(--magna-text);
+    text-align: right;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bar-track {
+    flex: 1;
+    height: 24px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+    min-width: 2px;
+}
+
+.bar-fill.red { background: var(--magna-red); }
+.bar-fill.green { background: #2e7d32; }
+.bar-fill.orange { background: #ef6c00; }
+.bar-fill.dark { background: var(--magna-dark); }
+
+.bar-count {
+    width: 35px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--magna-text);
+    text-align: right;
+    flex-shrink: 0;
+}
+
+/* Stacked Bar */
+.stacked-bar-track {
+    flex: 1;
+    height: 24px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+}
+
+.stacked-segment {
+    height: 100%;
+    transition: width 0.5s ease;
+}
+
+.stacked-segment.ok { background: #2e7d32; }
+.stacked-segment.nok { background: #c62828; }
+.stacked-segment.gz { background: #ef6c00; }
+
+/* Prüfplan Status Cards */
+.pp-status-cards {
+    display: flex;
+    gap: 12px;
+}
+
+.pp-status-card {
+    flex: 1;
+    padding: 16px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.pp-status-card.overdue { background: #fce4ec; }
+.pp-status-card.today { background: #fff3e0; }
+.pp-status-card.planned { background: #e8f5e9; }
+.pp-status-card.done { background: #e3f2fd; }
+
+.pp-status-card .pp-num {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.pp-status-card.overdue .pp-num { color: #c62828; }
+.pp-status-card.today .pp-num { color: #ef6c00; }
+.pp-status-card.planned .pp-num { color: #2e7d32; }
+.pp-status-card.done .pp-num { color: #1565c0; }
+
+.pp-status-card .pp-lbl {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--magna-label);
+    margin-top: 4px;
+}
+
+/* Workflow Log */
+.wf-log-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.wf-log-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 4px;
+    background: var(--magna-light-gray);
+    font-size: 12px;
+}
+
+.wf-log-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.wf-log-icon.email { background: #2e7d32; }
+.wf-log-icon.condition { background: #7b1fa2; }
+.wf-log-icon.trigger { background: #1565c0; }
+.wf-log-icon.delay { background: #ef6c00; }
+
+.wf-log-details {
+    flex: 1;
+    color: var(--magna-text);
+}
+
+.wf-log-time {
+    font-size: 11px;
+    color: var(--magna-label);
+    flex-shrink: 0;
+}
+
+.stats-empty {
+    text-align: center;
+    padding: 30px;
+    color: #bbb;
+    font-size: 13px;
+}
