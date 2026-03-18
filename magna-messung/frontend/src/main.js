@@ -30,7 +30,7 @@ document.addEventListener('contextmenu', (e) => e.preventDefault());
 // Base layout
 document.querySelector('#app').innerHTML = `
 <header class="app-header">
-    <span class="logo-text">MAGNA</span>
+    <span class="logo-text">QIMS</span>
     <span class="header-divider"></span>
     <span class="header-subtitle">Messung Erfassung</span>
 </header>
