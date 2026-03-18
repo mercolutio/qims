@@ -142,13 +142,7 @@ export async function renderWorkflowTab() {
     document.getElementById('wfToggleActive')?.addEventListener('click', async () => {
         if (!workflowId) { alert('Bitte zuerst speichern.'); return; }
         const isActive = allWorkflows.find(w => w.id === workflowId)?.active;
-        if (isActive) {
-            // Deaktivieren
-            await ExecuteSQL(`UPDATE workflows SET active = 0 WHERE id = ${workflowId}`);
-        } else {
-            // Aktivieren
-            await fetch(`http://localhost:8080/api/workflows/${workflowId}/activate`, { method: 'POST' }).catch(() => {});
-        }
+        await ExecuteSQL(`UPDATE workflows SET active = ${isActive ? 0 : 1} WHERE id = ${workflowId}`);
         await loadWorkflowList();
         updateToggleButton();
     });
