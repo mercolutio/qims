@@ -1253,6 +1253,21 @@ func triggerWorkflowsForUpdatedMessungen(query string) {
 
 // --- Health ---
 
+func handleTestEmail(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	loadSMTPFromDB()
+	err := sendSMTPEmail(smtpConfig.From, "QIMS Test-Mail", "Dies ist eine Test-Mail von QIMS.\n\nWenn Sie diese E-Mail erhalten, funktioniert die SMTP-Konfiguration korrekt.")
+	w.Header().Set("Content-Type", "application/json")
+	if err != nil {
+		json.NewEncoder(w).Encode(map[string]string{"status": "error", "message": err.Error()})
+	} else {
+		json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+	}
+}
+
 func handleHealth(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
@@ -1284,6 +1299,7 @@ func main() {
 	http.HandleFunc("/api/einstellungen/", corsMiddleware(handleEinstellungen))
 	http.HandleFunc("/api/db/tables", corsMiddleware(handleDBTables))
 	http.HandleFunc("/api/db/query", corsMiddleware(handleDBQuery))
+	http.HandleFunc("/api/test-email", corsMiddleware(handleTestEmail))
 	http.HandleFunc("/api/health", corsMiddleware(handleHealth))
 
 	fmt.Printf("Magna Server gestartet auf Port %s\n", port)

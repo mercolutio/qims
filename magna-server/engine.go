@@ -55,16 +55,53 @@ type SMTPConfig struct {
 
 var smtpConfig SMTPConfig
 
+func loadSMTPFromDB() {
+	var value string
+	err := db.QueryRow("SELECT value FROM einstellungen WHERE key = 'smtp'").Scan(&value)
+	if err != nil || value == "" {
+		return
+	}
+	var cfg struct {
+		Host     string `json:"host"`
+		Port     string `json:"port"`
+		User     string `json:"user"`
+		Password string `json:"password"`
+		From     string `json:"from"`
+	}
+	if err := json.Unmarshal([]byte(value), &cfg); err != nil {
+		return
+	}
+	if cfg.Host != "" {
+		smtpConfig.Host = cfg.Host
+	}
+	if cfg.Port != "" {
+		smtpConfig.Port = cfg.Port
+	}
+	if cfg.User != "" {
+		smtpConfig.User = cfg.User
+	}
+	if cfg.Password != "" {
+		smtpConfig.Password = cfg.Password
+	}
+	if cfg.From != "" {
+		smtpConfig.From = cfg.From
+	}
+	log.Printf("SMTP aus DB geladen: %s:%s", smtpConfig.Host, smtpConfig.Port)
+}
+
 func initSMTPConfig() {
 	// Defaults
 	smtpConfig = SMTPConfig{
 		Host: "localhost",
 		Port: "587",
-		From: "magna@localhost",
+		From: "qims@localhost",
 	}
 
+	// Try file first
 	data, err := os.ReadFile("smtp.conf")
 	if err != nil {
+		// Try DB
+		loadSMTPFromDB()
 		return
 	}
 	for _, line := range strings.Split(string(data), "\n") {
@@ -251,6 +288,9 @@ func replacePlaceholders(text string, data map[string]interface{}) string {
 }
 
 func sendSMTPEmail(to, subject, body string) error {
+	// Reload config from DB before sending
+	loadSMTPFromDB()
+
 	msg := fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n%s",
 		smtpConfig.From, to, subject, body)
 

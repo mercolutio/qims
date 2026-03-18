@@ -8,15 +8,17 @@ const defaultColors = [
 ];
 
 let cmConfig = { menus: [] };
+let smtpConfig = { host: '', port: '587', user: '', password: '', from: '' };
 let dbColumns = [];
 
 export async function renderEinstellungenTab() {
     const content = document.getElementById('tabContent');
     content.innerHTML = '<div class="settings-page"><p style="text-align:center;color:#999;padding:40px;">Laden...</p></div>';
 
-    const [settingResult, colResult] = await Promise.all([
+    const [settingResult, colResult, smtpResult] = await Promise.all([
         GetSetting('kontextmenu'),
-        ExecuteSQL('PRAGMA table_info(messungen)')
+        ExecuteSQL('PRAGMA table_info(messungen)'),
+        GetSetting('smtp')
     ]);
 
     // Parse config — support old format (single menu) and new format (multiple menus)
@@ -44,6 +46,11 @@ export async function renderEinstellungenTab() {
     try {
         const parsed = JSON.parse(colResult);
         if (parsed.rows) dbColumns = parsed.rows.map(r => r[1]);
+    } catch {}
+
+    try {
+        const parsed = JSON.parse(smtpResult);
+        if (parsed.value) smtpConfig = JSON.parse(parsed.value);
     } catch {}
 
     renderPage();
@@ -93,6 +100,41 @@ function renderPage() {
         <button class="settings-save-btn" id="cmSave">Speichern</button>
         <span class="settings-toast" id="cmToast">Gespeichert!</span>
     </div>`;
+
+    // === SMTP Section ===
+    html += `<div class="settings-section">
+        <div class="settings-section-header">
+            <input type="text" class="settings-menu-name" value="E-Mail (SMTP)" disabled style="font-weight:700;" />
+        </div>
+        <div class="settings-field">
+            <label>SMTP Host</label>
+            <input type="text" id="smtpHost" value="${smtpConfig.host || ''}" placeholder="z.B. smtp.gmail.com oder mail.firma.de" />
+        </div>
+        <div style="display:flex;gap:12px;">
+            <div class="settings-field" style="flex:1;">
+                <label>Port</label>
+                <input type="text" id="smtpPort" value="${smtpConfig.port || '587'}" placeholder="587" />
+            </div>
+            <div class="settings-field" style="flex:2;">
+                <label>Absender E-Mail</label>
+                <input type="text" id="smtpFrom" value="${smtpConfig.from || ''}" placeholder="noreply@firma.de" />
+            </div>
+        </div>
+        <div class="settings-field">
+            <label>Benutzername</label>
+            <input type="text" id="smtpUser" value="${smtpConfig.user || ''}" placeholder="Benutzername oder E-Mail" />
+        </div>
+        <div class="settings-field">
+            <label>Passwort</label>
+            <input type="password" id="smtpPassword" value="${smtpConfig.password || ''}" placeholder="SMTP Passwort" />
+        </div>
+        <div style="margin-top:16px;display:flex;gap:10px;align-items:center;">
+            <button class="settings-save-btn" id="smtpSave">SMTP Speichern</button>
+            <button class="settings-save-btn" id="smtpTest" style="background:#1565c0;">Test-Mail senden</button>
+            <span class="settings-toast" id="smtpToast"></span>
+        </div>
+    </div>`;
+
     html += '</div>';
 
     document.getElementById('tabContent').innerHTML = html;
@@ -177,6 +219,56 @@ function bindEvents() {
         await SaveSetting('kontextmenu', JSON.stringify(cmConfig));
         const toast = document.getElementById('cmToast');
         if (toast) { toast.classList.add('visible'); setTimeout(() => toast.classList.remove('visible'), 2000); }
+    });
+
+    // SMTP Save
+    document.getElementById('smtpSave')?.addEventListener('click', async () => {
+        smtpConfig = {
+            host: document.getElementById('smtpHost').value,
+            port: document.getElementById('smtpPort').value,
+            user: document.getElementById('smtpUser').value,
+            password: document.getElementById('smtpPassword').value,
+            from: document.getElementById('smtpFrom').value,
+        };
+        await SaveSetting('smtp', JSON.stringify(smtpConfig));
+        const toast = document.getElementById('smtpToast');
+        if (toast) { toast.textContent = 'Gespeichert!'; toast.style.color = '#2e7d32'; toast.classList.add('visible'); setTimeout(() => toast.classList.remove('visible'), 2000); }
+    });
+
+    // SMTP Test
+    document.getElementById('smtpTest')?.addEventListener('click', async () => {
+        // Save first
+        smtpConfig = {
+            host: document.getElementById('smtpHost').value,
+            port: document.getElementById('smtpPort').value,
+            user: document.getElementById('smtpUser').value,
+            password: document.getElementById('smtpPassword').value,
+            from: document.getElementById('smtpFrom').value,
+        };
+        await SaveSetting('smtp', JSON.stringify(smtpConfig));
+
+        const toast = document.getElementById('smtpToast');
+        toast.textContent = 'Sende Test-Mail...';
+        toast.style.color = '#1565c0';
+        toast.classList.add('visible');
+
+        try {
+            const result = await ExecuteSQL("SELECT 'test'");
+            // Trigger test email via API
+            const res = await fetch('/api/test-email', { method: 'POST' });
+            const text = await res.text();
+            if (text.includes('ok') || text.includes('OK') || res.ok) {
+                toast.textContent = 'Test-Mail gesendet!';
+                toast.style.color = '#2e7d32';
+            } else {
+                toast.textContent = 'Fehler: ' + text;
+                toast.style.color = '#c62828';
+            }
+        } catch (e) {
+            toast.textContent = 'Fehler: ' + e.message;
+            toast.style.color = '#c62828';
+        }
+        setTimeout(() => toast.classList.remove('visible'), 5000);
     });
 }
 
